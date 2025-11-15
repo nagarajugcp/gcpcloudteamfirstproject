@@ -1,1 +1,352 @@
-this is for first file in my repo
+
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link, useParams, useNavigate } from "react-router-dom";
+
+// Single-file React app (default export) for a minerals trading website.
+// Uses Tailwind CSS classes for styling. Replace placeholder data and images as needed.
+
+const PRODUCTS = [
+  {
+    id: "io-62",
+    name: "Iron Ore Lump (Fe 62%)",
+    code: "IMC-IO-62L",
+    overview: "High-grade iron ore lump suitable for blast furnace and direct reduction feedstock.",
+    specs: {
+      Fe: "\u2265 62%",
+      SiO2: "\u2264 6.5%",
+      Al2O3: "\u2264 2.5%",
+      Moisture: "\u2264 10%"
+    },
+    moq: "10,000 MT",
+    terms: ["FOB", "CIF", "DAP"],
+    leadTime: "2–6 weeks",
+    inspection: "SGS pre-shipment inspection",
+  },
+  {
+    id: "cu-30",
+    name: "Copper Concentrate (Cu 28–32%)",
+    code: "IMC-CU-30C",
+    overview: "Sulfide flotation concentrate for smelters and refineries.",
+    specs: { Cu: "28–32%", S: "\u2264 10%", Moisture: "\u2264 8%" },
+    moq: "2,000 MT",
+    terms: ["FOB", "CFR"],
+    leadTime: "3–8 weeks",
+    inspection: "Independent lab assay",
+  },
+  {
+    id: "bx-50",
+    name: "Bauxite (Al2O3 45–55%)",
+    code: "IMC-BX-50",
+    overview: "Metallurgical and abrasive grade bauxite for alumina production.",
+    specs: { Al2O3: "45–55%", SiO2: "Variable", Moisture: "Site dependent" },
+    moq: "5,000 MT",
+    terms: ["CIF", "DAP"],
+    leadTime: "4–10 weeks",
+    inspection: "Certificate of Analysis",
+  },
+  {
+    id: "mn-40",
+    name: "Manganese Ore (Mn 30–44%)",
+    code: "IMC-MN-40",
+    overview: "Sinter and high-grade manganese ore for steelmaking and alloys.",
+    specs: { Mn: "30–44%", P: "Low", Moisture: "\u2264 12%" },
+    moq: "3,000 MT",
+    terms: ["FOB", "CIF"],
+    leadTime: "3–7 weeks",
+    inspection: "Third-party lab report",
+  },
+  {
+    id: "li-66",
+    name: "Lithium Spodumene Concentrate (Li2O 6–7%)",
+    code: "IMC-LI-66",
+    overview: "Battery-grade spodumene concentrate for downstream processing.",
+    specs: { Li2O: "6–7%", Fe: "Low", Moisture: "\u2264 2%" },
+    moq: "500 MT",
+    terms: ["FOB"],
+    leadTime: "6–12 weeks",
+    inspection: "Battery-grade assay",
+  },
+  {
+    id: "gd-1",
+    name: "Gold Concentrate / Doré",
+    code: "IMC-GD-01",
+    overview: "Secure gold doré and concentrate shipments with assay certificates and secure logistics.",
+    specs: { Purity: "Variable (see assay)", Packaging: "Secure drums/containers" },
+    moq: "Call for inquiry",
+    terms: ["CIF", "DAP"],
+    leadTime: "TBD",
+    inspection: "Assay certificate & secure chain of custody",
+  },
+];
+
+function Nav() {
+  return (
+    <nav className="bg-slate-800 text-white">
+      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <Link to="/" className="text-xl font-bold">Global Minerals Trading Co.</Link>
+        <div className="space-x-4">
+          <Link to="/products" className="hover:underline">Products</Link>
+          <Link to="/about" className="hover:underline">About</Link>
+          <Link to="/contact" className="hover:underline">Contact</Link>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+function Home() {
+  const navigate = useNavigate();
+  return (
+    <div className="space-y-8">
+      <header className="bg-gradient-to-r from-slate-900 to-slate-700 text-white py-24">
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <h1 className="text-4xl md:text-5xl font-extrabold">Trusted global supplier of industrial minerals</h1>
+          <p className="mt-4 text-lg">Sourcing, quality-assurance and logistics for iron ore, copper, bauxite, manganese, lithium and precious concentrates — from mine to your facility.</p>
+          <div className="mt-6 flex justify-center gap-3">
+            <button onClick={() => navigate('/contact')} className="bg-amber-500 hover:bg-amber-600 text-slate-900 px-5 py-2 rounded font-semibold">Request a quote</button>
+            <button onClick={() => navigate('/products')} className="border border-white px-5 py-2 rounded">View product catalog</button>
+          </div>
+        </div>
+      </header>
+
+      <section className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-6">
+        <div className="bg-white rounded shadow p-6">
+          <h3 className="font-semibold">Verified supply chains</h3>
+          <p className="mt-2 text-sm">Third-party inspection and certified sourcing to protect quality and provenance.</p>
+        </div>
+        <div className="bg-white rounded shadow p-6">
+          <h3 className="font-semibold">Flexible logistics</h3>
+          <p className="mt-2 text-sm">FOB, CIF, DAP — multimodal shipment planning and customs support.</p>
+        </div>
+        <div className="bg-white rounded shadow p-6">
+          <h3 className="font-semibold">Trade finance support</h3>
+          <p className="mt-2 text-sm">Letters of Credit, structured trade finance and competitive payment terms.</p>
+        </div>
+      </section>
+
+      <section className="max-w-6xl mx-auto px-6">
+        <h2 className="text-2xl font-bold">Featured products</h2>
+        <div className="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {PRODUCTS.slice(0,6).map(p => (
+            <div key={p.id} className="border rounded p-4 bg-white">
+              <h3 className="font-semibold">{p.name}</h3>
+              <p className="text-sm mt-2">{p.overview}</p>
+              <div className="mt-3 flex justify-between items-center">
+                <span className="text-xs text-slate-600">MOQ: {p.moq}</span>
+                <Link to={`/products/${p.id}`} className="text-amber-600 hover:underline text-sm">View product</Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+    </div>
+  );
+}
+
+function Products() {
+  return (
+    <div className="max-w-6xl mx-auto px-6 py-10">
+      <h1 className="text-3xl font-bold">Products Catalogue</h1>
+      <p className="mt-2 text-sm text-slate-600">Browse our range of industrial minerals. Click any product to view full specifications and request a quote.</p>
+      <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {PRODUCTS.map(p => (
+          <div key={p.id} className="border rounded overflow-hidden bg-white">
+            <div className="p-4">
+              <h3 className="font-semibold">{p.name}</h3>
+              <p className="mt-2 text-sm">{p.overview}</p>
+            </div>
+            <div className="p-4 border-t flex items-center justify-between">
+              <div className="text-xs text-slate-600">MOQ: {p.moq}</div>
+              <Link to={`/products/${p.id}`} className="text-amber-600 hover:underline">Details & quote</Link>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ProductDetail() {
+  const { id } = useParams();
+  const p = PRODUCTS.find(x => x.id === id);
+  const navigate = useNavigate();
+  if (!p) return (
+    <div className="max-w-4xl mx-auto p-6">Product not found. <button onClick={() => navigate('/products')} className="ml-2 text-amber-600">Back to products</button></div>
+  );
+
+  return (
+    <div className="max-w-6xl mx-auto px-6 py-10">
+      <div className="bg-white p-6 rounded shadow">
+        <div className="flex flex-col md:flex-row md:items-start md:gap-8">
+          <div className="flex-1">
+            <h1 className="text-2xl font-bold">{p.name}</h1>
+            <div className="mt-2 text-sm text-slate-600">Code: {p.code} • Lead time: {p.leadTime}</div>
+            <p className="mt-4">{p.overview}</p>
+
+            <h3 className="mt-6 font-semibold">Typical specification</h3>
+            <table className="mt-2 w-full text-sm border-collapse">
+              <tbody>
+                {Object.entries(p.specs).map(([k,v]) => (
+                  <tr key={k} className="border-t"><td className="py-2 font-medium w-40">{k}</td><td className="py-2">{v}</td></tr>
+                ))}
+              </tbody>
+            </table>
+
+            <div className="mt-6 flex gap-3">
+              <button onClick={() => navigate('/contact', { state: { product: p.name } })} className="bg-amber-500 px-4 py-2 rounded font-semibold text-slate-900">Request quote</button>
+              <a href="#" className="underline">Download spec sheet (PDF)</a>
+            </div>
+          </div>
+
+          <aside className="mt-6 md:mt-0 w-full md:w-64">
+            <div className="border rounded p-4 bg-slate-50">
+              <div className="text-sm">Available shipment terms:</div>
+              <ul className="mt-2 text-sm space-y-1">
+                {p.terms.map(t => <li key={t}>• {t}</li>)}
+              </ul>
+
+              <div className="mt-4 text-sm text-slate-600">Inspection: {p.inspection}</div>
+              <div className="mt-4 text-sm">MOQ: {p.moq}</div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function About() {
+  return (
+    <div className="max-w-5xl mx-auto px-6 py-12">
+      <h1 className="text-3xl font-bold">About Global Minerals Trading Co.</h1>
+      <p className="mt-4 text-slate-700">Global Minerals Trading Co. connects certified mining producers with industrial buyers worldwide. We offer sourcing, QA, logistics and trade finance support — backed by 20+ years of combined industry experience. Headquartered in [City, Country], our focus is on transparency, compliance and reliable deliveries.</p>
+
+      <h2 className="mt-8 text-2xl font-semibold">Services</h2>
+      <ul className="mt-4 grid sm:grid-cols-2 gap-4 text-sm">
+        <li>• Sourcing & Procurement</li>
+        <li>• Quality Assurance (SGS/Intertek)</li>
+        <li>• Logistics & Shipping (FOB/CIF/DAP)</li>
+        <li>• Trade Finance & Letters of Credit</li>
+        <li>• Regulatory & Compliance</li>
+        <li>• Market Intelligence & Price Reports</li>
+      </ul>
+    </div>
+  );
+}
+
+function Contact() {
+  // Basic client-side form; replace with a backend endpoint or form handler when ready.
+  const [form, setForm] = React.useState({ name: '', company: '', email: '', phone: '', destination: '', product: '', spec: '', quantity: '', incoterm: '' });
+  const [submitted, setSubmitted] = React.useState(false);
+
+  React.useEffect(() => {
+    // Pre-fill product from navigation state if provided
+    try {
+      const st = window.history.state && window.history.state.usr && window.history.state.usr.state;
+      if (st && st.product) setForm(f => ({ ...f, product: st.product }));
+    } catch (e) {}
+  }, []);
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setForm(f => ({ ...f, [name]: value }));
+  }
+
+  function submit(e) {
+    e.preventDefault();
+    // Simulate submission; replace with fetch(...) to backend.
+    console.log('Submitting RFQ', form);
+    setSubmitted(true);
+  }
+
+  if (submitted) return (
+    <div className="max-w-3xl mx-auto px-6 py-12">
+      <div className="bg-white p-6 rounded shadow text-center">
+        <h2 className="text-xl font-bold">Thanks — we received your inquiry</h2>
+        <p className="mt-2 text-sm text-slate-600">Our team will contact you within one business day. If urgent, call +[phone number].</p>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="max-w-4xl mx-auto px-6 py-12">
+      <h1 className="text-2xl font-bold">Get a personalized quote</h1>
+      <form onSubmit={submit} className="mt-6 bg-white p-6 rounded shadow space-y-4">
+        <div className="grid sm:grid-cols-2 gap-4">
+          <input required name="name" value={form.name} onChange={handleChange} placeholder="Full name" className="border p-2 rounded" />
+          <input name="company" value={form.company} onChange={handleChange} placeholder="Company name" className="border p-2 rounded" />
+        </div>
+        <div className="grid sm:grid-cols-2 gap-4">
+          <input required name="email" value={form.email} onChange={handleChange} placeholder="Email address" type="email" className="border p-2 rounded" />
+          <input name="phone" value={form.phone} onChange={handleChange} placeholder="Phone" className="border p-2 rounded" />
+        </div>
+        <div className="grid sm:grid-cols-2 gap-4">
+          <input name="destination" value={form.destination} onChange={handleChange} placeholder="Destination port / delivery location" className="border p-2 rounded" />
+          <select name="product" value={form.product} onChange={handleChange} className="border p-2 rounded">
+            <option value="">Select product</option>
+            {PRODUCTS.map(p => <option key={p.id} value={p.name}>{p.name}</option>)}
+          </select>
+        </div>
+        <textarea name="spec" value={form.spec} onChange={handleChange} placeholder="Required spec / grade" className="border p-2 rounded w-full" rows={3} />
+        <div className="grid sm:grid-cols-2 gap-4">
+          <input name="quantity" value={form.quantity} onChange={handleChange} placeholder="Monthly / one-time quantity (MT)" className="border p-2 rounded" />
+          <select name="incoterm" value={form.incoterm} onChange={handleChange} className="border p-2 rounded">
+            <option value="">Preferred Incoterm</option>
+            <option>FOB</option>
+            <option>CIF</option>
+            <option>DAP</option>
+            <option>EXW</option>
+          </select>
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-slate-600">By submitting you agree to our terms and privacy policy.</div>
+          <button type="submit" className="bg-amber-500 px-4 py-2 rounded font-semibold">Submit inquiry</button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <div className="min-h-screen bg-slate-50 text-slate-900">
+        <Nav />
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/:id" element={<ProductDetail />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="*" element={<div className="p-8">Page not found. <Link to="/">Return home</Link></div>} />
+          </Routes>
+        </main>
+
+        <footer className="mt-12 bg-slate-800 text-white">
+          <div className="max-w-6xl mx-auto px-6 py-8 grid md:grid-cols-3 gap-6">
+            <div>
+              <div className="font-semibold">Global Minerals Trading Co.</div>
+              <div className="text-sm mt-2">Reliable supply. Clear compliance. Competitive pricing.</div>
+            </div>
+            <div className="text-sm">
+              <div className="font-semibold">Contact</div>
+              <div className="mt-2">Email: sales@example.com</div>
+              <div>Phone: +[phone number]</div>
+            </div>
+            <div className="text-sm">
+              <div className="font-semibold">Quick links</div>
+              <div className="mt-2 flex flex-col gap-1">
+                <Link to="/products" className="hover:underline">Products</Link>
+                <Link to="/about" className="hover:underline">About</Link>
+                <Link to="/contact" className="hover:underline">Contact</Link>
+              </div>
+            </div>
+          </div>
+          <div className="text-center text-xs text-slate-400 py-4">© {new Date().getFullYear()} Global Minerals Trading Co. — Terms & Privacy</div>
+        </footer>
+      </div>
+    </Router>
+  );
+}
